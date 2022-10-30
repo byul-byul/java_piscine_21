@@ -1,99 +1,61 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
-class Main {
+public class Program {
+    private static final int    UNIQ_CHAR_COUNT     = 65536;
+    private static final int    CHOSEN_CHAR_COUNT   = 10;
+    private static final int    HISTOGRAM_TOP_LEVEL = 10;
 
-    private static final int        UNIQ_CHAR_AMOUNT = 65535;
-    private static final int        CHOS_CHAR_AMOUNT = 10;
+    private static void     sortArr(String line, int[][] resArr) {
+        char[]  charArr = line.toCharArray();
+        char[]  uniqCharArr = new char[UNIQ_CHAR_COUNT];
+        int     max[] = new int[2];
 
-    public static int   getCharPosition(char c, char[] arr, int arrLen) {
-
-        int         i = 0;
-
-        while (i < arrLen) {
-            if (c == arr[i]) {
-                return (i);
-            }
-            i++;
+        for (char c: charArr) {
+            uniqCharArr[c] += 1;
         }
-        return (-1);
-    }
-
-    public static void  insertCharInArr(char c, char[] arr, int pos, int len) {
-
-        char[]      temp = new char[len + 1];
-        boolean     isInserted = false;
-
-        for (int i = 0, i <= len, i++) {
-            if (i == pos) {
-                temp[i] = c;
-                isInserted = true;
-            }
-            else {
-                if (isInserted) {
-                    temp[i] = arr[i + 1];
-                }
-                else {
-                    temp[i] = arr[i];
+        for (int i = 0; i < CHOSEN_CHAR_COUNT; i++) {
+            max[0] = 0;
+            for (int j = 0; j < UNIQ_CHAR_COUNT; j++) {
+                if (uniqCharArr[j] > max[0]) {
+                    max[0] = uniqCharArr[j];
+                    max[1] = j;
                 }
             }
+            if (max[0] == 0) {
+                break ;
+            }
+            uniqCharArr[max[1]] = 0;
+            resArr[0][i] = max[0];
+            resArr[1][i] = max[1];
         }
     }
 
-    public static int   addCharToArr(char c, char[] arr, int arrLen) {
-    
-/*        for (int i = 0; i < arrLen; i++) {
-            if (c < arr[i]) {
-                insertCharInArr(c, arr, i, arrLen);
-                return (i);
-            }
+    public static void      printHistogram(int[][] chosenCharList) {
+        int     max = 0;
+
+        for (int i = 0; i < chosenCharList.length; i++) {
+            if (chosenCharList[0][i] > max)
+                max = chosenCharList[0][i];
         }
-*/        arr[arrLen] = c;
-        return (arrLen + 1);
+        for (int level = HISTOGRAM_TOP_LEVEL; level >= -1; --level) {
+            for (int i = 0; i < CHOSEN_CHAR_COUNT && chosenCharList[0][i] > 0; ++i) {
+                if (level == -1)
+                    System.out.printf("%3c", (char)chosenCharList[1][i]);
+                else if (level == HISTOGRAM_TOP_LEVEL * chosenCharList[0][i] / max)
+                    System.out.printf("%3d", chosenCharList[0][i]);
+                else if (level < HISTOGRAM_TOP_LEVEL * chosenCharList[0][i] / max)
+                    System.out.printf("%3c", '#');
+                else
+                    System.out.printf("%c", ' ');
+            }
+            System.out.println();
+        }   
     }
 
-    public static void  incArrElementValue(int[] arr, int elemPos) {
-    
-        arr[elemPos] += 1;
-    }
-
-    public static void  main(String[] args) {
-
-        Scanner     scan                = new Scanner(System.in);
-        String      inputLine           = scan.nextLine();
-        long        len                 = inputLine.length();
-        char        srcCharArr[]        = inputLine.toCharArray();
-
-        char[]      uniqCharArr         = new char[UNIQ_CHAR_AMOUNT];
-        int[]       uniqCharCountArr    = new int[UNIQ_CHAR_AMOUNT];
-        int[]       chosenCharArr       = new int[CHOS_CHAR_AMOUNT];
-        int         uniqArrLen          = 0;
-        int         chosArrLen          = 0;
-
-        int         i                   = 0;
-
-        for (int j = 0; j < UNIQ_CHAR_AMOUNT; j++) {
-            uniqCharCountArr[j] = 0;
-        }
-
-        while (i < len) {
-
-            int     charPosition;
-
-            charPosition = getCharPosition(srcCharArr[i], uniqCharArr, uniqArrLen);
-            if (charPosition < 0) {
-                uniqArrLen = addCharToArr(srcCharArr[i], uniqCharArr, uniqArrLen);
-                incArrElementValue(uniqCharCountArr, uniqArrLen - 1);
-            }
-            else {
-                incArrElementValue(uniqCharCountArr, charPosition);
-            }
-            int ppp = getCharPosition(srcCharArr[i], uniqCharArr, uniqArrLen);
-            System.out.println(i + " pos:" + ppp + ", char:" + uniqCharArr[ppp] + ", count:" + uniqCharCountArr[ppp]);
-            i++;
-        }
-
-        //sortArr(chosenCharArr);
-        //displayHistogram();
+    public static void      main(String[] args) {
+        Scanner     scan = new Scanner(System.in);
+        int[][]     chosenCharList = new int[2][CHOSEN_CHAR_COUNT];
+        sortArr(scan.nextLine(), chosenCharList);
+        printHistogram(chosenCharList);
     }
 }

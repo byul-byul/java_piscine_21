@@ -32,6 +32,8 @@ public class Transaction {
         else {
             _amount = 0;
         }
+        _recipient.getTList().add(this);
+        _sender.getTList().add(this);
     }
 
     public UUID     getIdentifier() {

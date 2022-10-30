@@ -10,6 +10,38 @@ public class Transaction {
 
     private         Transaction() {}
 
+/*    public          Transaction(Integer recID, Integer senID, Integer amt) {
+        if (amt == 0) {
+            System.err.println("Incorrect arguments for Transaction() !");
+            System.exit(-1);
+        }
+        Transaction     temp;
+
+        temp._identifier = UUID.randomUUID();
+        try {
+            temp._recipient = UserList.getUserByID(recID);
+            temp._sender = UserList.getUserByID(senID);
+        } catch (UserNotFoundException e) {
+            System.out.println(e.toString());
+        }
+        if (amt > 0) {
+            temp._amount = amt;
+            temp._isDebit = true;
+            temp._recipient.getTList().add(temp);
+            temp._amount = -amt;
+            temp._isDebit = false;
+            temp._sender.getTList().add(temp);
+        }
+        else {
+            temp._amount = amt;
+            temp._isDebit = false;
+            temp._sender.getTList().add(temp);
+            temp._amount = -amt;
+            temp._isDebit = true;
+            temp._recipient.getTList().add(temp);
+        }
+    }*/
+
     public          Transaction(User rcp, User snd, boolean ctg, Integer amt) {
         if (rcp == null || snd == null || amt == null) {
             System.err.println("Incorrect arguments for Transaction() !");
@@ -32,6 +64,8 @@ public class Transaction {
         else {
             _amount = 0;
         }
+        _recipient.getTList().add(this);
+        _sender.getTList().add(this);
     }
 
     public UUID     getIdentifier() {

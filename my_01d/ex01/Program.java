@@ -1,15 +1,5 @@
 public class Program {
 
-    public static void  showUserFields(User u) {
-
-        System.out.println("***__U_DATA__***");
-        System.out.println("user_name: " + u.getName());
-        System.out.println("user_idtf: " + String.format("%08d", u.getIdentifer()));
-        System.out.println("user_blnc: " + u.getBalance());
-        System.out.println("***__________***");
-        System.out.println();
-    }
-
     public static void  main(String[] args) {
 
         User        sender = new User();
@@ -18,16 +8,13 @@ public class Program {
         User        asdfgh = new User();
         User        zxcvbn = new User();
 
-
         sender.setName("Alex");
         sender.setBalance(1000);
 
-        showUserFields(sender);
-        showUserFields(recipient);
-        showUserFields(qwerty);
-        showUserFields(asdfgh);
-        showUserFields(zxcvbn);
-
+        sender.showDetails();
+        recipient.showDetails();
+        qwerty.showDetails();
+        asdfgh.showDetails();
+        zxcvbn.showDetails();
     }
 }
-//String.format("%03d", lastGeneratedID)

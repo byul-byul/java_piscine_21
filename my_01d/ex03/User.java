@@ -1,11 +1,13 @@
 public class User {
 
-    private Integer     _identifier;
-    private String      _name;
-    private int         _balance;
+    private Integer             _identifier;
+    private String              _name;
+    private int                 _balance;
+    private TransactionsList    _transactionList;
 
-    public          User(Integer id, String name, int balance) {
-        _identifier = id;
+    public          User(String name, int balance) {
+        _identifier = UserIdsGenerator.getInstance().generateId();
+        _transactionList = new TransactionsLinkedList();
         _name = name;
         _balance = balance;
         if (_balance < 0) {
@@ -14,7 +16,8 @@ public class User {
     }
 
     public          User() {
-        _identifier = null;
+        _identifier = UserIdsGenerator.getInstance().generateId();
+        _transactionList = new TransactionsLinkedList();
         _name = null;
         _balance = 0;
     }
@@ -31,8 +34,8 @@ public class User {
         return (_balance);
     }
 
-    public void     setIdentifier(Integer id) {
-        _identifier = id;
+    public TransactionsList getTList() {
+        return (_transactionList);
     }
 
     public void     setName(String name) {
