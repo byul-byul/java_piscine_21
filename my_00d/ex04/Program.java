@@ -10,6 +10,10 @@ public class Program {
         char[]  uniqCharArr = new char[UNIQ_CHAR_COUNT];
         int     max[] = new int[2];
 
+        for (int i = 0; i < UNIQ_CHAR_COUNT; i++) {
+            uniqCharArr[i] = 0;
+        }
+
         for (char c: charArr) {
             uniqCharArr[c] += 1;
         }

@@ -1,39 +1,40 @@
 import java.util.Scanner;
 
 public class Program {
-    public final static String MODE_SEPARATOR = ".";
-    public final static char WORD_SEPARATOR = ' ';
-    public final static String CELL_SEPARATOR = "|";
-    public final static String HERE = "HERE";
-    public final static String NOT_HERE = "NOT_HERE";
+    public final static String  MODE_SEPARATOR = ".";
+    public final static String  CELL_SEPARATOR = "|";
+    public final static String  HERE = "HERE";
+    public final static String  NOT_HERE = "NOT_HERE";
+    public final static char    WORD_SEPARATOR = ' ';
 
-    public final static int MODE_STUDENTS_INFO = 0;
-    public final static int MODE_TIMETABLE_INFO = 1;
-    public final static int MODE_ATTENDANCE_INFO = 2;
-    public final static int MODE_DISPLAYING = 3;  
+    public final static int     MODE_STUDENTS_INFO = 0;
+    public final static int     MODE_TIMETABLE_INFO = 1;
+    public final static int     MODE_ATTENDANCE_INFO = 2;
+    public final static int     MODE_DISPLAYING = 3;  
 
-    public final static int MAX_STUDENT_COUNT = 10;
-    public final static int MAX_TOTAL_CLASS_COUNT = 100;
-    public final static int MAX_CLASS_PER_WEEK = 10;
-    public final static int MAX_CLASS_PER_DAY = 6;
-    public final static int MAX_STUDENT_NAME_LENGTH = 10;
-    public final static int CELL_LENGTH = 10;
+    public final static int     MAX_STUDENT_COUNT = 10;
+    public final static int     MAX_TOTAL_CLASS_COUNT = 100;
+    public final static int     MAX_CLASS_PER_WEEK = 10;
+    public final static int     MAX_CLASS_PER_DAY = 6;
+    public final static int     MAX_STUDENT_NAME_LENGTH = 10;
+    public final static int     CELL_LENGTH = 10;
     
-    public final static int FIRST_WEEKDAY_OF_MONTH = 1;
-    public final static int DAY_COUNT_OF_MONTH = 30;
-    public final static int DAY_COUNT_OF_WEEK = 7;
-    public final static String[] WEEKDAY_NAMES = {"MO", "TU", "WE", "TH", "FR", "SA", "SU"};
+    public final static int     FIRST_WEEKDAY_OF_MONTH = 1;
+    public final static int     DAY_COUNT_OF_MONTH = 30;
+    public final static int     DAY_COUNT_OF_WEEK = 7;
 
-    public static String[] students = new String[MAX_STUDENT_COUNT];
-    public static int[] monthdayToWeekdayMatch = new int[DAY_COUNT_OF_MONTH];
-    public static int[] classHoursCount = new int[DAY_COUNT_OF_WEEK];
-    public static int[][] listOfClassHours = new int[DAY_COUNT_OF_WEEK][MAX_CLASS_PER_DAY];
-    public static int[][] classIDToDatetimeMatch = new int[MAX_TOTAL_CLASS_COUNT][2];
-    public static int[][] attendances = new int[MAX_STUDENT_COUNT][MAX_TOTAL_CLASS_COUNT];
+    public final static String[]    WEEKDAY_NAMES = {"MO","TU", "WE", "TH", "FR", "SA", "SU"};
 
-    public static int studentCount = 0;
-    public static int classCount = 0;
-    public static int CURRENT_MODE = MODE_STUDENTS_INFO;
+    public static String[]  students = new String[MAX_STUDENT_COUNT];
+    public static int[]     monthdayToWeekdayMatch = new int[DAY_COUNT_OF_MONTH];
+    public static int[]     classHoursCount = new int[DAY_COUNT_OF_WEEK];
+    public static int[][]   listOfClassHours = new int[DAY_COUNT_OF_WEEK][MAX_CLASS_PER_DAY];
+    public static int[][]   classIDToDatetimeMatch = new int[MAX_TOTAL_CLASS_COUNT][2];
+    public static int[][]   attendances = new int[MAX_STUDENT_COUNT][MAX_TOTAL_CLASS_COUNT];
+
+    public static int       studentCount = 0;
+    public static int       classCount = 0;
+    public static int       CURRENT_MODE = MODE_STUDENTS_INFO;
 
     public static void main(String args[]) {
         Scanner scanner = new Scanner(System.in);

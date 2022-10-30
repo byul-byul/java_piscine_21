@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Program {
-    public static void main(String[] args) {
+    public static void      main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
         int query = 0;
@@ -15,7 +15,7 @@ public class Program {
         System.out.println("Count of coffee-request - " + coffeeRequestCount);
     }
 
-    public static int digitsSum(long num) {
+    public static int       digitsSum(long num) {
         int res = 0;
 
         while (num != 0) {
@@ -25,7 +25,7 @@ public class Program {
         return (res);
     }
 
-    public static boolean isPrimeNum(int num) {
+    public static boolean   isPrimeNum(int num) {
         boolean isPrime = true;
 
         if (num <= 1) {
