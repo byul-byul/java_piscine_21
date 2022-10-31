@@ -16,7 +16,7 @@ public class Program {
     }
 
     private static long     getSize(File file) {
-        long size = 0;
+        long        size = 0;
         if (file.isFile())
             return file.length();
         for (File f : getListFiles(file)) {
@@ -28,7 +28,7 @@ public class Program {
         return size;
     }
 
-    private static void     listDirecory(String[] cmd) throws IOException {
+    private static void     listDirContent(String[] cmd) throws IOException {
         File listedDir = cmd.length == 1 ? curDir.toFile()
                 : curDir.resolve(cmd[1]).normalize().toFile();
         File[] files = getListFiles(listedDir);
@@ -36,7 +36,7 @@ public class Program {
             System.out.printf("%s %dKB\n", f.getName(), Math.round(getSize(f) / 1024.0));
     }
 
-    private static void     changeDir(String[] cmd) throws IOException {
+    private static void     changeCurDirectory(String[] cmd) throws IOException {
         if (cmd.length > 2) {
             throw new IOException("cd: too many arguments");
         } else if (cmd.length == 1) {
@@ -75,10 +75,10 @@ public class Program {
                         move(cmd);
                         break;
                     case "cd":
-                        changeDir(cmd);
+                        changeCurDirectory(cmd);
                         break;
                     case "ls":
-                        listDirecory(cmd);
+                        listDirContent(cmd);
                         break;
                     case "exit":
                         System.exit(0);
