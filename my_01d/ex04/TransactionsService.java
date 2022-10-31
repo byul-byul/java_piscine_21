@@ -1,10 +1,12 @@
+import java.util.UUID;
+
 public class TransactionsService {
 
 	private UserList            _userList;
     private TransactionsList    _invalidTransactionsList;
 
     public                      TransactionsService() {
-        _userList = new UserArrayList();
+        _userList = new UsersArrayList();
         _invalidTransactionsList = new TransactionsLinkedList();
     }
 
@@ -13,7 +15,7 @@ public class TransactionsService {
     }
 
     public Transaction[]        getUserTransactionsList(Integer id) {
-        return(_userList.getUserByID(id).getTList());
+        return(_userList.getUserByID(id).getTList().toArray());
     }
 
     public void                 addToInvalidTransactionsList(Transaction t) {
@@ -27,36 +29,32 @@ public class TransactionsService {
     public Integer              getUserBalance(User u) {
         return (u.getBalance());
     }
+
+    public Transaction[]        getUserTransactionsList(User u) {
+        return (u.getTList().toArray());
+    }
+
     public void                 makeTransaction(Integer recID, Integer senID, Integer amt) {
+        if (getUserBalance(_userList.getUserByID(senID)) < amt) {
+            throw (new IllegalTransactionException());
+        }
+        User tempR = new User();
+        User tempS = new User();
+        try {
+            tempR = _userList.getUserByID(recID);
+            tempS = _userList.getUserByID(senID);
+
+        } catch (UserNotFoundException exception) {
+            System.out.println(exception.toString());
+            return ;
+        }
+        UUID tempID = UUID.randomUUID();
 
         if (amt == 0) {
-            System.err.println("Incorrect arguments for Transaction() !");
-            System.exit(-1);
+            _invalidTransactionsList.add(new Transaction(tempID, tempR, tempS, amt > 0 ? true : false, amt));
+            return ;
         }
-        Transaction     temp;
-
-        temp._identifier = UUID.randomUUID();
-        try {
-            temp._recipient = UserList.getUserByID(recID);
-            temp._sender = UserList.getUserByID(senID);
-        } catch (UserNotFoundException e) {
-            System.out.println(e.toString());
-        }
-        temp._amount = amt;
-        if (amt > 0) {
-            temp._isDebit = true;
-            temp._recipient.getTList().add(temp);
-            temp._amount = -amt;
-            temp._isDebit = false;
-            temp._sender.getTList().add(temp);
-        }
-        else {
-            temp._isDebit = false;
-            temp._sender.getTList().add(temp);
-            temp._amount = -amt;
-            temp._isDebit = true;
-            temp._recipient.getTList().add(temp);
-        }
+        tempR.getTList().add(new Transaction(tempID, tempR, tempS, amt > 0 ? true : false, amt));
+        tempS.getTList().add(new Transaction(tempID, tempR, tempS, amt > 0 ? false : true, -amt));
     }
-    public Transaction[]        getUserTransactionsList(User u) {}
 }

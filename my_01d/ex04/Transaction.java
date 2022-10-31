@@ -10,37 +10,29 @@ public class Transaction {
 
     private         Transaction() {}
 
-/*    public          Transaction(Integer recID, Integer senID, Integer amt) {
-        if (amt == 0) {
+    public          Transaction(UUID id, User rcp, User snd, boolean ctg, Integer amt) {
+        if (rcp == null || snd == null || amt == null) {
             System.err.println("Incorrect arguments for Transaction() !");
             System.exit(-1);
         }
-        Transaction     temp;
+        _identifier = id;
+        _recipient = rcp;
+        _sender = snd;
+        _isDebit = ctg;
+        _amount = amt;
 
-        temp._identifier = UUID.randomUUID();
-        try {
-            temp._recipient = UserList.getUserByID(recID);
-            temp._sender = UserList.getUserByID(senID);
-        } catch (UserNotFoundException e) {
-            System.out.println(e.toString());
+        if (_isDebit && _amount > 0) {
+            _recipient.setBalance(_recipient.getBalance() + _amount);
+            _sender.setBalance(_sender.getBalance() - _amount);
         }
-        if (amt > 0) {
-            temp._amount = amt;
-            temp._isDebit = true;
-            temp._recipient.getTList().add(temp);
-            temp._amount = -amt;
-            temp._isDebit = false;
-            temp._sender.getTList().add(temp);
+        else if (!_isDebit && _amount < 0) {
+            _recipient.setBalance(_recipient.getBalance() - _amount);
+            _sender.setBalance(_sender.getBalance() + _amount);
         }
         else {
-            temp._amount = amt;
-            temp._isDebit = false;
-            temp._sender.getTList().add(temp);
-            temp._amount = -amt;
-            temp._isDebit = true;
-            temp._recipient.getTList().add(temp);
+            _amount = 0;
         }
-    }*/
+    }
 
     public          Transaction(User rcp, User snd, boolean ctg, Integer amt) {
         if (rcp == null || snd == null || amt == null) {

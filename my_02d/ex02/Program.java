@@ -10,36 +10,33 @@ import java.io.IOException;
 public class Program {
     private static Path     curDir;
 
-    public static void      main(String[] args) {
-        BufferedReader reader = null;
-        while (true) {
-            try {
-                reader = new BufferedReader(new InputStreamReader(System.in));
-                if (curDir == null)
-                    curDir = Paths.get("").toAbsolutePath();
-                String[] cmd = reader.readLine().split("\\s+");
-                switch (cmd[0]) {
-                    case "ls":
-                        listDirecory(cmd);
-                        break;
-                    case "cd":
-                        changeDir(cmd);
-                        break;
-                    case "mv":
-                        move(cmd);
-                        break;
-                    case "exit":
-                        System.exit(0);
-                    default:
-                        System.out.println("Command '" + cmd[0] + "' not found");
-                }
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            }
-        }
+    private static File[]   getListFiles(File file) {
+        File[] files = file.listFiles();
+        return files != null ? files : new File[0];
     }
 
-    private static void changeDir(String[] cmd) throws IOException {
+    private static long     getSize(File file) {
+        long size = 0;
+        if (file.isFile())
+            return file.length();
+        for (File f : getListFiles(file)) {
+            if (file.isFile())
+                size += f.length();
+            else
+                size += getSize(f);
+        }
+        return size;
+    }
+
+    private static void     listDirecory(String[] cmd) throws IOException {
+        File listedDir = cmd.length == 1 ? curDir.toFile()
+                : curDir.resolve(cmd[1]).normalize().toFile();
+        File[] files = getListFiles(listedDir);
+        for (File f : files)
+            System.out.printf("%s %dKB\n", f.getName(), Math.round(getSize(f) / 1024.0));
+    }
+
+    private static void     changeDir(String[] cmd) throws IOException {
         if (cmd.length > 2) {
             throw new IOException("cd: too many arguments");
         } else if (cmd.length == 1) {
@@ -52,9 +49,9 @@ public class Program {
         }
     }
 
-    private static void move(String[] cmd) throws IOException {
+    private static void     move(String[] cmd) throws IOException {
         if (cmd.length != 3) {
-            throw new IOException("mv: Invalid arguments");
+            throw new IOException("mv: invalid arguments");
         } else {
             if (Files.isDirectory(Paths.get(cmd[2]))) {
                 Files.move(curDir.resolve(cmd[1]),
@@ -65,30 +62,32 @@ public class Program {
         }
     }
 
-    private static File[] getListFiles(File file) {
-        File[] files = file.listFiles();
-        return files != null ? files : new File[0];
-    }
-
-    private static long getSize(File file) {
-        long size = 0;
-
-        if (file.isFile())
-            return file.length();
-        for (File f : getListFiles(file)) {
-            if (file.isFile())
-                size += f.length();
-            else
-                size += getSize(f);
+    public static void      main(String[] args) {
+        BufferedReader reader = null;
+        while (true) {
+            try {
+                reader = new BufferedReader(new InputStreamReader(System.in));
+                if (curDir == null)
+                    curDir = Paths.get("").toAbsolutePath();
+                String[] cmd = reader.readLine().split("\\s+");
+                switch (cmd[0]) {
+                    case "mv":
+                        move(cmd);
+                        break;
+                    case "cd":
+                        changeDir(cmd);
+                        break;
+                    case "ls":
+                        listDirecory(cmd);
+                        break;
+                    case "exit":
+                        System.exit(0);
+                    default:
+                        System.out.println("Command '" + cmd[0] + "' not found ! ");
+                }
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
         }
-        return size;
-    }
-
-    private static void listDirecory(String[] cmd) throws IOException {
-        File listedDir = cmd.length == 1 ? curDir.toFile()
-                : curDir.resolve(cmd[1]).normalize().toFile();
-        File[] files = getListFiles(listedDir);
-        for (File f : files)
-            System.out.printf("%s %dKB\n", f.getName(), Math.round(getSize(f) / 1024.0));
     }
 }
