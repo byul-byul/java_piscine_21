@@ -3,14 +3,13 @@ public class SumThread extends Thread {
     private int     _index;
     private int     _start;
     private int     _fin;
+    private int     _sum = 0;
 
-    private int     _getSum(int s, int f) {
-
-        int         sum = 0;
-        for(int i = s; i < f; i++) {
-            sum += Program.intArray[i];
+    public int      calculateSum(int s, int f) {
+        for(int i = s; i <= f; i++) {
+            _sum += Program.intArray[i];
         }
-        return (sum);
+        return (_sum);
     }
 
     public          SumThread(int i, int s, int f) {
@@ -21,6 +20,9 @@ public class SumThread extends Thread {
 
     @Override
     public void     run() {
-        System.out.println("Thread " + (_index + 1) + ": start=" + _start + "; fin=" + _fin + " sum=" + _getSum(_start, _fin));
+        System.out.println("Thread " + (_index + 1)
+                            + ": from " + _start
+                            + " to " + _fin
+                            + " sum is " + calculateSum(_start, _fin));
     }
 }

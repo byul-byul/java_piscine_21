@@ -12,21 +12,23 @@ public class Program {
     }
     
     public static void      main(String[] args) {
-
         if (args.length != 1) {
             _printErrAndExit();
         }
-
         String [] splittedArgs = args[0].split("=");
-
         if (splittedArgs.length == 2 && splittedArgs[0].equals("--count")) {
-            int     printCount = Integer.parseInt(splittedArgs[1]);
+            int     printCount = 0;
+            try {
+                printCount = Integer.parseInt(splittedArgs[1]);
+            } catch (NumberFormatException e) {
+                System.err.println(e.getMessage());
+                System.exit(-1);
+            }
             if (printCount < 0) {
                 _printErrAndExit();
             }
             Hen     egg = new Hen(printCount);
             Egg     hen = new Egg(printCount);
-
             egg.start();
             hen.start();
             try {
